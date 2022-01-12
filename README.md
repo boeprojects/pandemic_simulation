@@ -26,36 +26,34 @@ The model consists of three variables:
     R (recovered/removed)
 The value of the variables moves between 0 and 1, interpreted as 0% to 100% of population.
 
-- Basic conception class man, city and methods walk and update
+- Basic conception class "human", "city" and methods "walk" and "update"
 ```python
 class Mensch:
     def __init__(self, x, y):
         self.x, self.y = x, y
     
-    def gehen(self, dx, dy): # Delta x und y als Veränderung
+    def gehen(self, dx, dy): # delta x and y as modification
          self.x, self.y = self.x+dx, self.y+dy
 
 class Stadt:
     def __init__(self, n):
-        self.menschen = [Mensch(0, 0) for i in range(n)]#wir arbeiten mit einer list comprehension
+        self.menschen = [Mensch(0, 0) for i in range(n)]#working with list comprehension
         
     
-    def update(self): # neue Stadtmethode als Zeitschritt
+    def update(self): # new method of city as step in time
         for mensch in self.menschen:
-            mensch.gehen(3, 6)# da keine Variable dx/dy existent hier, muss ich Werte eingeben!
+            mensch.gehen(3, 6)# at this point, variables dx/dy are not existing - therefore it is important to input values!
 
-            # Aufgabe: Mensch zufällig bewegen, in Werten zwischen -1 und 1 auch als floats!
-            # Dann die Methode Update von außen aufrufen !
-        
+
 karlsruhe = Stadt(10)
 bob = Mensch(2, 5)
 ```
-- Menschen bewegen sich im KO-System
+- humans are mooving inside the coordinate system
 
 ![virus_001](https://user-images.githubusercontent.com/67191365/148960764-8ac5a1e7-7788-4030-b4de-12b464221bb2.PNG)
 
-- Wir definieren delta x und delta y als Veränderung
-- Menschen bewegen sich zufällig in der Methode update
+- we define delta x and delta y as modification/change
+- humans are mooving randomly within the method update
 ```python
 import numpy as np
 
@@ -64,40 +62,40 @@ class Mensch:
     def __init__(self, x, y):
         self.x, self.y = x, y
     
-    def gehen(self, dx, dy): # Delta x und y als Veränderung
+    def gehen(self, dx, dy): # Delta x and y as change/modification
          self.x, self.y = self.x+dx, self.y+dy
 
 class Stadt:
     def __init__(self, n):
-        self.menschen = [Mensch(np.random.uniform(-100, 100), np.random.uniform(-100, 100)) for i in range(n)]#wir arbeiten mit einer list comprehension
+        self.menschen = [Mensch(np.random.uniform(-100, 100), np.random.uniform(-100, 100)) for i in range(n)]#using a list comprehension
         self.history = []
         self.age = 0
         self.save()
             
     def update(self, n=1): # neue Stadtmethode als Zeitschritt
-        for _ in range(n): # wäre i, da es nicht genutzt wird nehmen wir Unterstrich (soll n mal genutzt werden)
+        for _ in range(n): # normally, i is used, in case we don't use this variable, we take underscore!
             for mensch in self.menschen:
-                mensch.gehen(np.random.uniform(-1, 1), np.random.uniform(-1, 1))# da keine Variable dx/dy existent hier, muss ich Werte eingeben!
+                mensch.gehen(np.random.uniform(-1, 1), np.random.uniform(-1, 1))# no variable dx/dy existing at this point, values must be inserted!
             self.age += 1
             self.save()
     
     def save(self):
         for mensch in self.menschen:
-            self.history.append([self.age, mensch.x, mensch.y])# muss eine liste in liste sein
+            self.history.append([self.age, mensch.x, mensch.y])# must be a list in list!
                 
     def pprint(self):
         for mensch in self.menschen:
-            print(mensch.x, mensch.y) # wir greifen auf die Laufvariable x und y über die Variable mensch zu! mensch enthält ein Objekt vom Typ Mensch!
+            print(mensch.x, mensch.y) # accessing indexed/running variable x and y over the variable "human". human contains an object of type human!
         
         
 karlsruhe = Stadt(100)
 karlsruhe.update()
 karlsruhe.update(n=1000)
-len(karlsruhe.history) # history nur attribut ohne liste , keine () o.ä.
+len(karlsruhe.history) # history is at this point only an attribute without list, no () or similar!
 ```
 result 100200
 
-### Visualiierung Pandas (Werte) und Plotly (Video)
+### Visualization Pandas (values) and Plotly (video)
 ```python
 import pandas as pd
 
@@ -114,12 +112,11 @@ px.scatter(df, x='x', y='y', animation_frame='age', range_x=[-100, 100], range_y
 ```
 
 ![virus_003](https://user-images.githubusercontent.com/67191365/148966466-158f2487-5fce-46bd-993d-99a6951d6b29.PNG)
-
-mögliche Erweiterungen:
-- Grenze der Stadt einhalten
-- Menschen sollen 2 mögliche Attribute erhalten, kann infiziert oder nicht oder kann tot sein oder nicht, genesen oder nicht !
-- Zufällige Zahl der Menschen werden initial infiziert sein, wenn sie aufeinander treffen wird es eine Wahrscheinlichkeit der Ansteckung geben
-- Ansteckung verringert sich nach Genesung (Dauer der Infektion 14 timesetps/ages o.ä.)
-- Wahrscheinlichkeit des Todes bei Infektion kommt hinzu, Mensch bleibt auf Karte ohne Bewegung und Aktion
-- Plot als 2 Linien (Anzahl Leute infiziert / nicht infiziert, Sehen/Tendenz wie es sich über Zeit verringert und die Bewegungen der Menschen) als Abschluss
+possible development of scope:
+- adherence for city limits within the simulation
+- men receive 2 possible attributes - an be infected, not infected, can be dead or alive, recovered or not recovered !
+- random number of men will be infected initially, in case of contact there will be a probability of incetion
+- infection reduces after recovering (duration of invection 14 timesteps/ages or similar)
+- probability of death with infection can be added (man/point stais on map without movement or action)
+- plot as two lines (number of people infected / not infected, picture/tendency of development over time and movement of poeple) as termination
 
