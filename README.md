@@ -5,8 +5,9 @@ Simple OOP Study on pandemic infection progression
 Based on SIR Modell:
 
 •	Deteministic, continuous model (vs descrete model with finite population)
-•	Constant term beta => how many others are infected by virus positive person per time unit (per day) => 
-  S'(t)=-beta*S(t)*I(t)
+•	Constant term beta => how many others are infected by virus positive person per time unit (per day) 
+
+S'(t)=-beta*S(t)*I(t)
   
 •	Out of I(t) infected persons (%-tage of population) emerge beta*I(t) infected persons after a day (e.g. 15% if beta=3/2)
 – in this case everybody is possibly to be infected – more real only S(t) is infectable
@@ -14,84 +15,90 @@ Based on SIR Modell:
 
 •	Every day beta*S(t)*I(t) infected persons are added
 •	The number of infected persons grows every day by beta*S(t)*I(t) (as percentage, all variables are scaled between 0 and 1)
+
   I'(t)=beta*S(t)*I(t) – alpha*I(t)
 
 •	Per time unit (everey day) a part of infected persons alpha passes away / recovers [no differenciation]. Hence 1/alpha is defined as average duration of desease (example 7 days)
-  R'(t)=alpha*I(t)
 
-Base reproduction number R0 = beta as infections per day and 1/alpha as duration of desease in days = beta/alpha (e.g. number of infections caused by infected person during whole desease period)
+R'(t)=alpha*I(t)
+
+Basic Reproduction Number R0 = beta as infections per day and 1/alpha as duration of desease in days = beta/alpha (e.g. number of infections caused by infected person during whole desease period)
+
 The model consists of three variables:
-    S (susceptibles)
-    I (infected)
-    R (recovered/removed)
+
+    - S (susceptibles)
+    - I (infected)
+    - R (recovered/removed)
 The value of the variables moves between 0 and 1, interpreted as 0% to 100% of population.
 
+- These Code snippets show a stepwise development of features within the oop modeling process
 - Basic conception class "human", "city" and methods "walk" and "update"
 ```python
-class Mensch:
+class Human:
     def __init__(self, x, y):
         self.x, self.y = x, y
     
-    def gehen(self, dx, dy): # delta x and y as modification
+    def walk(self, dx, dy): #delta x and y as change/modification
          self.x, self.y = self.x+dx, self.y+dy
 
-class Stadt:
+class City:
     def __init__(self, n):
-        self.menschen = [Mensch(0, 0) for i in range(n)]#working with list comprehension
+        self.humans = [human(0, 0) for i in range(n)]#working with list comprehension
         
     
-    def update(self): # new method of city as step in time
-        for mensch in self.menschen:
-            mensch.gehen(3, 6)# at this point, variables dx/dy are not existing - therefore it is important to input values!
+    def update(self): #new method of city as step in time
+        for human in self.humans:
+            mensch.walk(3, 6) #at this point, variables dx/dy are not existing - therefore it is important to input values!
 
-
-karlsruhe = Stadt(10)
-bob = Mensch(2, 5)
+        
+karlsruhe = City(10)
+bob = Human(2, 5)
 ```
 - humans are mooving inside the coordinate system
 
-![virus_001](https://user-images.githubusercontent.com/67191365/148960764-8ac5a1e7-7788-4030-b4de-12b464221bb2.PNG)
+![virus_004](https://user-images.githubusercontent.com/67191365/149169551-2ab02c27-cedc-450d-9d66-8d32242a4a50.PNG)
+
 
 - we define delta x and delta y as modification/change
-- humans are mooving randomly within the method update
+- humans are mooving randomly within the method "update"
 ```python
 import numpy as np
 
 
-class Mensch:
+class Human:
     def __init__(self, x, y):
         self.x, self.y = x, y
     
-    def gehen(self, dx, dy): # Delta x and y as change/modification
+    def walk(self, dx, dy): #delta x and y as change/modification
          self.x, self.y = self.x+dx, self.y+dy
 
-class Stadt:
+class City:
     def __init__(self, n):
-        self.menschen = [Mensch(np.random.uniform(-100, 100), np.random.uniform(-100, 100)) for i in range(n)]#using a list comprehension
+        self.humans = [Human(np.random.uniform(-100, 100), np.random.uniform(-100, 100)) for i in range(n)]#working with list comprehension
         self.history = []
         self.age = 0
         self.save()
             
-    def update(self, n=1): # neue Stadtmethode als Zeitschritt
-        for _ in range(n): # normally, i is used, in case we don't use this variable, we take underscore!
-            for mensch in self.menschen:
-                mensch.gehen(np.random.uniform(-1, 1), np.random.uniform(-1, 1))# no variable dx/dy existing at this point, values must be inserted!
+    def update(self, n=1): #new method of city as step in time
+        for _ in range(n):  # normally, i is used, in case we don't use this variable, we take underscore
+            for human in self.humans:
+                mensch.walk(np.random.uniform(-1, 1), np.random.uniform(-1, 1))#at this point, variables dx/dy are not existing - it is important to input values!
             self.age += 1
             self.save()
     
     def save(self):
-        for mensch in self.menschen:
-            self.history.append([self.age, mensch.x, mensch.y])# must be a list in list!
+        for human in self.humans:
+            self.history.append([self.age, human.x, human.y]) #must be a list in list!
                 
     def pprint(self):
-        for mensch in self.menschen:
-            print(mensch.x, mensch.y) # accessing indexed/running variable x and y over the variable "human". human contains an object of type human!
+        for human in self.humans:
+            print(human.x, human.y) #accessing indexed/running variable x and y over the variable "human". (human contains an object of type human!).
         
         
-karlsruhe = Stadt(100)
+karlsruhe = City(100)
 karlsruhe.update()
 karlsruhe.update(n=1000)
-len(karlsruhe.history) # history is at this point only an attribute without list, no () or similar!
+len(karlsruhe.history) #history is at this point only an attribute without list, no () or similar!
 ```
 result 100200
 
