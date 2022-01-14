@@ -31,7 +31,7 @@ The model consists of three variables:
     - R (recovered/removed)
 The value of the variables moves between 0 and 1, interpreted as 0% to 100% of population.
 
-- These Code snippets show a stepwise development of features within the oop modeling process
+- Dynamic Programming: these Code snippets show a stepwise development of features within the oop modeling process
 - Basic conception class "human", "city" and methods "walk" and "update"
 ```python
 class Human:
@@ -121,9 +121,9 @@ px.scatter(df, x='x', y='y', animation_frame='age', range_x=[-100, 100], range_y
 ![virus_003](https://user-images.githubusercontent.com/67191365/148966466-158f2487-5fce-46bd-993d-99a6951d6b29.PNG)
 possible development of scope:
 - adherence for city limits within the simulation
-- men receive 2 possible attributes - an be infected, not infected, can be dead or alive, recovered or not recovered !
-- random number of men will be infected initially, in case of contact there will be a probability of incetion
+- humans receive 2 possible attributes - can be infected, not infected, can be dead or alive, recovered or not recovered !
+- random number of humans will be infected initially, in case of contact there will be a probability of infection
 - infection reduces after recovering (duration of invection 14 timesteps/ages or similar)
-- probability of death with infection can be added (man/point stais on map without movement or action)
+- probability of death with infection can be added (human/point stays on map without movement or action)
 - plot as two lines (number of people infected / not infected, picture/tendency of development over time and movement of poeple) as termination
 
