@@ -119,6 +119,7 @@ px.scatter(df, x='x', y='y', animation_frame='age', range_x=[-100, 100], range_y
 ```
 
 ![virus_003](https://user-images.githubusercontent.com/67191365/148966466-158f2487-5fce-46bd-993d-99a6951d6b29.PNG)
+
 possible development of scope:
 - adherence for city limits within the simulation
 - humans receive 2 possible attributes - can be infected, not infected, can be dead or alive, recovered or not recovered !
