@@ -203,7 +203,17 @@ class City:
     def pprint(self):
         for human in self.menschen:
             print(human.x, human.y) #accessing indexed/running variable x, y over variable human that contains an object of type human
-        
-s = City(100, 1000, (1, 0.3, 14))# Number of humans of city (100), 1000days, plus parameter [distance 0.3 for infection of fellow human]
+```
+### Different Settings of parameters to simulate a simple picture of infection progress as follows
+```python
+s = City(100, 1000, (1, 0.3, 14))# Number of humans of city (100), 1000days, plus parameter (distance 0.3 for infection of fellow human)
 s.show()
 ```
+![virus_005](https://user-images.githubusercontent.com/67191365/150544281-784dc9c2-39c5-4f59-9723-8993ce5f5329.PNG)
+![virus_006](https://user-images.githubusercontent.com/67191365/150544406-edcb5f87-fc89-4ebe-8639-6c80e700c83e.PNG)
+![virus_007](https://user-images.githubusercontent.com/67191365/150544459-30a456f0-1d4c-4c57-b5bb-f1421992b120.PNG)
+![virus_008](https://user-images.githubusercontent.com/67191365/150544501-09b97d06-3cff-4c37-87f8-d4d8dfc788b8.PNG)
+![virus_009](https://user-images.githubusercontent.com/67191365/150544541-8fbc0ea6-92f3-4782-af89-e47865a0722c.PNG)
+
+
+
