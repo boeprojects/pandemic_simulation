@@ -120,11 +120,90 @@ px.scatter(df, x='x', y='y', animation_frame='age', range_x=[-100, 100], range_y
 
 ![virus_003](https://user-images.githubusercontent.com/67191365/148966466-158f2487-5fce-46bd-993d-99a6951d6b29.PNG)
 
-possible development of scope:
-- adherence for city limits within the simulation
-- humans receive 2 possible attributes - can be infected, not infected, can be dead or alive, recovered or not recovered !
-- random number of humans will be infected initially, in case of contact there will be a probability of infection
-- infection reduces after recovering (duration of invection 14 timesteps/ages or similar)
-- probability of death with infection can be added (human/point stays on map without movement or action)
-- plot as two lines (number of people infected / not infected, picture/tendency of development over time and movement of poeple) as termination
+## Possible development of scope:
+•	adherence for city limits within the simulation – human stay into borders of City (-100, 100) instead of randomizes leaps (method walk loop (self.x = 100 if self.x > 100 else self.x etc.)
 
+•	human receives 2 possible attributes - can be infected, not infected, recovered or not recovered
+
+•	random number of humans will be infected initially
+
+•	in case of contact there will be a probability of infection
+
+•	infection reduces after recovering (duration of infection 14 timesteps/ages or similar)
+
+•	probability of death with infection can be added (human/point stays on map without movement or action)
+
+•	plot as two lines (number of people infected / not infected, picture/tendency of development over time and movement of people) as termination
+
+```python
+class Human:
+    def __init__(self, x, y, uid, status='S'):#unique identifier uid
+        self.x, self.y = x, y
+        self.uid = uid
+        self.status = status
+        self.infected_time = 0 #attribute default zero
+        
+    def update(self, max_infected_time=14):
+        self.walk(np.random.uniform(-1, 1), np.random.uniform(-1, 1))#values for dx/dy [as variables that eists in method walk]!
+        if self.status == 'I':
+            self.infected_time += 1
+            if self.infected_time > max_infected_time:
+                self.status = 'R' #"status" approaches  14 days infection time and gets new value R=Recovered - infection reduces after recovering in 14 timesteps
+
+    
+    def walk(self, dx, dy): #delta x and delta y as change/modification of x, y
+        self.x, self.y = self.x+dx, self.y+dy # x or y can be bigger or smaller than (-)100 in this position !
+        self.x = 100 if self.x > 100 else self.x #adherence for city limits within the simulation
+        self.x = -100 if self.x < -100 else self.x
+        self.y = 100 if self.y > 100 else self.y
+        self.y = -100 if self.y < -100 else self.y
+        
+
+class City:
+    def __init__(self, n, days, params):
+        self.days = days
+        self.params = params
+        self.humans = [Human(np.random.uniform(-100, 100), np.random.uniform(-100, 100), i, random.choice(['S', 'I', 'R'])) for i in range(n)]
+        self.dummies = [Human(-1002, 1000, -1), Mensch(-1002, 990, -2, status='I'), Human(-1002, 980, -3, status='R')]
+        # defining self.dummies in order to compensate random effects [.e.g. stepwise augmentation of status without leaps]
+        self.history = []
+        self.age = 0
+        self.save()
+        self.update(n=self.days)
+            
+    def update(self, n=1): # new method of City as timestep
+        for _ in tqdm(range(n)): # #normally, i is used, in case we don't use this variable, we take underscore (should be uses n-times)
+            for human in self.humans:
+                human.update(max_infected_time=self.params[2])
+                if human.status == 'S': # check with status 'S'
+                    for fellow in self.humans: #must change indexed/running variable [fellow]
+                        if human.uid != fellow.uid:
+                            distance = math.sqrt(((fellow.x-human.x)**2)+((fellow.y-human.y)**2)) 
+                            #euklidean distance, calculation of distance between human and fellow human [scalar product]
+                            if distance < self.params[0] and fellow.status == 'I': 
+                            #after this, in case of contact there will be a probability of infection, therefore random
+                                r = random.random() 
+                                    human.status = 'I'
+                                    break
+                            
+            self.age += 1 #age as timesteps continues to max! (max_infected_time) over update method!
+            self.save()#saving history of timesteps
+
+             
+    def save(self):# representing historical coordinates of timesteps of object "human" in a list of values
+        for human in self.humans:
+            self.history.append([self.age, human.x, human.y, human.uid, human.status])#attention to datatype list within list
+        for human in self.dummies:
+            self.history.append([self.age, human.x, human.y, human.uid, human.status])
+    
+    def show(self):
+        df = pd.DataFrame(self.history, columns=['age', 'x', 'y', 'uid', 'status'])
+        return px.scatter(df, x='x', y='y', color='status', color_discrete_map={'I': 'red', 'R': 'green', 'S': 'blue'}, animation_frame='age', animation_group='uid', range_x=[-105, 105], range_y=[-105, 105], width=1000, height=1000)
+                
+    def pprint(self):
+        for human in self.menschen:
+            print(human.x, human.y) #accessing indexed/running variable x, y over variable human that contains an object of type human
+        
+s = City(100, 1000, (1, 0.3, 14))# Number of humans of city (100), 1000days, plus parameter [distance 0.3 for infection of fellow human]
+s.show()
+```
